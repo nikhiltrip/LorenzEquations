@@ -10,16 +10,22 @@ def f(t, y):
     return np.array([10 * (y1 - x), x * (28 - z) - y1, x * y1 - (8 / 3) * z])   
 
 
-#create random initial conditions for x, y, and z
+#create random initial conditions for x, y, and z enclosed by -10 and 10
 np.random.seed(1)
 y0_list=np.random.uniform(low=-10, high=10, size=(10,3))
+
+#create a list of slopes for the line of best fits
 xslopes=[]
 yslopes=[]
 zslopes=[]
 
+#create arrays for the start times and end times for each trial
+start=np.array([])
+end=np.array([])
 
 
 
+#loop through all the random initial conditions
 for i, y0 in enumerate(y0_list):
 
 
@@ -30,7 +36,7 @@ for i, y0 in enumerate(y0_list):
 
 
     #set time frame
-    tf=40
+    tf=50
     t_eval=np.linspace(0,tf,2000)
 
 
@@ -176,8 +182,18 @@ for i, y0 in enumerate(y0_list):
 x_avg=np.mean(xslopes)
 y_avg=np.mean(yslopes)
 z_avg=np.mean(zslopes)
-print('x avg={},yavg={},zavg={}'.format(x_avg,y_avg,z_avg))
 
+#get median of Lyapunov Exponents
+x_median=np.median(xslopes)
+y_median=np.median(yslopes)
+z_median=np.median(zslopes)
+
+#get standard deviations of Lyapunov Exponents
+x_std=np.std(xslopes)
+y_std=np.std(yslopes)
+z_std=np.std(zslopes)
+
+print('x avg={}, y avg={}, z avg={}\nx med={}, y med={}, z med={}\nx std={}, y std={}, z std={}'.format(x_avg,y_avg,z_avg,x_median,y_median,z_median,x_std,y_std,z_std))
 
 
 
