@@ -20,8 +20,8 @@ yslopes=[]
 zslopes=[]
 
 #create arrays for the start times and end times for each trial
-start=np.array([])
-end=np.array([])
+start=np.array([5,0,25,10,5,15,5,5,0,0])
+end=np.array([30,35,55,33,35,40,30,30,30,32])
 
 
 
@@ -108,9 +108,11 @@ for i, y0 in enumerate(y0_list):
     #measure error
     delta=np.linalg.norm(solution.y-xchange.y, axis=0, ord=2)
 
+    #filtering the time to evaluate the linear regression
+    mask=np.logical_and(t_eval>start[i],t_eval<end[i])
 
     #create linear regression
-    a,b,r,p,s=linregress(t_eval, np.log(delta))
+    a,b,r,p,s=linregress(t_eval[mask], np.log(delta)[mask])
 
 
     #plot data
@@ -131,13 +133,12 @@ for i, y0 in enumerate(y0_list):
 
     ax2=plt.subplot(222)
 
-
     #meausre error
     delta=np.linalg.norm(solution.y-ychange.y, axis=0, ord=2)
 
 
     #create linear regression
-    a,b,r,p,s=linregress(t_eval, np.log(delta))
+    a,b,r,p,s=linregress(t_eval[mask], np.log(delta)[mask])
 
 
     #plot data
@@ -157,12 +158,15 @@ for i, y0 in enumerate(y0_list):
 
 
     ax3=plt.subplot(223)
+    
     #measure error
     delta=np.linalg.norm(solution.y-zchange.y, axis=0, ord=2)
 
 
     #create linear regression
-    a,b,r,p,s=linregress(t_eval, np.log(delta))
+    a,b,r,p,s=linregress(t_eval[mask], np.log(delta)[mask])
+
+    #plot data
     ax3.semilogy(t_eval, delta, label='Actual Error')
     ax3.semilogy(t_eval, np.exp(a*t_eval+b),label='Regression')
     ax3.set_title('Z Change differences; Lyapunov Exponent $\lambda${}'.format(a), fontsize=5.7)
